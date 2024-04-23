@@ -1,6 +1,9 @@
 {
   "devDependencies": {
+    "@types/react": "^18.2.79",
+    "@types/react-dom": "^18.2.25",
     "http-server": "^14.1.1",
+    "prettier": "3.2.5",
     "ts-loader": "^9.5.1",
     "typescript": "^5.4.5",
     "webpack": "^5.91.0",
@@ -8,6 +11,9 @@
   },
   "dependencies": {
     "comlink": "^4.4.1",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "react-router-dom": "^6.23.0",
     "sql.js-httpvfs": "^0.8.12"
   }
 }

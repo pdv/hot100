@@ -8,3 +8,6 @@ start:
 build:
 	npx webpack --mode=production
 
+format:
+	npx prettier . --write
+
