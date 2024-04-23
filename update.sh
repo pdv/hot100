@@ -1,6 +1,6 @@
 #!/bin/bash
 
-db_path=./hot100.sqlite3
+db_path=./dist/hot100.sqlite3
 csv_file=$(mktemp)
 
 rm ${db_path}
