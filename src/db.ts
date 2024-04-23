@@ -20,7 +20,7 @@ async function getDb(): Promise<Comlink.Remote<LazyHttpDatabase>> {
                 from: "inline",
                 config: {
                     serverMode: "full",
-                    url: "hot100.sqlite3",
+                    url: "./hot100.sqlite3",
                     requestChunkSize: 4096,
                 },
             },

@@ -2,7 +2,7 @@ import { queryPerformer } from "./db";
 import * as React from "react";
 import * as ReactDOM from "react-dom/client";
 import {
-    createBrowserRouter,
+    createHashRouter,
     Form,
     RouterProvider,
     useSearchParams,
@@ -11,32 +11,34 @@ import { useEffect, useState } from "react";
 
 function SearchPage() {
     const [searchParams, setSearchParams] = useSearchParams();
-    const [searchResults, setSearchResults] = useState("");
+    const [searchResults, setSearchResults] = useState<string[]>([]);
     useEffect(() => {
-        console.log("useEffect");
         const performer = searchParams.get("performer");
         if (performer) {
             queryPerformer(performer)
-                .then((r) => r.join("\n"))
                 .then(setSearchResults);
         }
     }, [searchParams]);
     return (
-        <div>
+        <>
             <Form role="search">
                 <label>
                     <input name="performer" />
                 </label>
                 <button type="submit">Search</button>
             </Form>
-            {searchResults !== "" ? <p>{searchResults}</p> : <p>Loading...</p>}
-        </div>
+            <ol>
+                {searchResults.map(result => (
+                    <li key={result}>{result}</li>
+                ))}
+            </ol>
+        </>
     );
 }
 
-const router = createBrowserRouter([
+const router = createHashRouter([
     {
-        path: "/",
+        path: "/*",
         element: <SearchPage />,
     },
 ]);
