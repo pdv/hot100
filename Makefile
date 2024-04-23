@@ -1,4 +1,4 @@
-make:
-	./node_modules/.bin/webpack --mode=development
-	./node_modules/.bin/http-server
+start:
+	npx webpack --mode=development
+	npx http-server
 
