@@ -33,15 +33,22 @@ async function getDb(): Promise<Comlink.Remote<LazyHttpDatabase>> {
 }
 
 interface Track {
-    chart_week: string
-    current_week: string
     title: string
-    performer: string
+    peak: string
 }
+
+const performerQuery = `
+select title, min(current_week) as peak
+from hot100_search
+where performer = ?
+group by 1
+order by 2
+`.trim();
 
 export async function queryPerformer(performer: string): Promise<string[]> {
     const db = await getDb();
-    const result = await db.query(`select * from hot100_search where performer = ?`, [performer]);
+    const result = await db.query(performerQuery, [performer]);
+    console.log(result);
     const cast = result as Track[];
-    return cast.map(t => `${t.title} ${t.current_week}`);
+    return cast.map(t => `${t.title} ${t.peak}`);
 }

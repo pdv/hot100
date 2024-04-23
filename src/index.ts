@@ -1,8 +1,12 @@
 import {queryPerformer} from "./worker";
 
 async function init() {
-  const result = await queryPerformer("The White Stripes");
-  document.body.textContent = result.join("\n");
+  const urlParams = new URLSearchParams(window.location.search);
+  const performer = urlParams.get("performer");
+  if (performer) {
+    const result = await queryPerformer(performer);
+    document.getElementById("content")!.innerText = result.join("\n");
+  }
 }
 
 init();
