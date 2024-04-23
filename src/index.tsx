@@ -10,13 +10,12 @@ import {
 import { useEffect, useState } from "react";
 
 function SearchPage() {
-    const [searchParams, setSearchParams] = useSearchParams();
+    const [searchParams] = useSearchParams();
     const [searchResults, setSearchResults] = useState<string[]>([]);
     useEffect(() => {
         const performer = searchParams.get("performer");
         if (performer) {
-            queryPerformer(performer)
-                .then(setSearchResults);
+            queryPerformer(performer).then(setSearchResults);
         }
     }, [searchParams]);
     return (
@@ -28,7 +27,7 @@ function SearchPage() {
                 <button type="submit">Search</button>
             </Form>
             <ol>
-                {searchResults.map(result => (
+                {searchResults.map((result) => (
                     <li key={result}>{result}</li>
                 ))}
             </ol>
