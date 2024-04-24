@@ -54,15 +54,27 @@ export interface Entry {
     position: string;
 }
 
-const chartQuery = `
+const entriesQuery = `
 select chart_week as week, current_week as position
 from hot100_search
 where performer = ?1 and title = ?2
 order by 1
 `.trim();
 
-export async function queryChart(performer: String, title: String): Promise<Entry[]> {
+export async function queryEntries(performer: String, title: String): Promise<Entry[]> {
     const db = await getDb();
-    const result = await db.query(chartQuery, [performer, title]);
+    const result = await db.query(entriesQuery, [performer, title]);
     return result as Entry[];
+}
+
+const chartQuery = `
+select current_week as peak, performer, title
+from hot100_search
+where chart_week = ?
+`.trim();
+
+export async function queryChart(week: String): Promise<Track[]> {
+    const db = await getDb();
+    const result = await db.query(chartQuery, [week]);
+    return result as Track[];
 }

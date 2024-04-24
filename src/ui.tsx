@@ -1,7 +1,25 @@
 import * as React from "react";
-import { useEffect, useState } from "react";
-import { Form, useLoaderData, useParams, useSearchParams } from "react-router-dom";
-import { Entry, Track, queryPerformer } from "./db";
+import { Form, Link, useLoaderData, useParams, useSearchParams } from "react-router-dom";
+import { Entry, Track } from "./db";
+
+export function ChartPage() {
+    const { week } = useParams();
+    const chart = useLoaderData() as Track[];
+    return (
+        <div>
+            <h3>{week}</h3>
+            <ol>
+                {chart.map((track) => (
+                    <li key={track.peak}>
+                        <Link to={`/tracks/${track.performer}/${track.title}`}>
+                            {track.performer} - {track.title}
+                        </Link>
+                    </li>
+                ))}
+            </ol>
+        </div>
+    );
+}
 
 export function TrackPage() {
     const { performer, title } = useParams();
@@ -14,7 +32,9 @@ export function TrackPage() {
             <ol>
                 {entries.map((entry) => (
                     <li key={entry.week}>
-                        {entry.week} - {entry.position}
+                        <Link to={`/charts/${entry.week}`}>
+                            {entry.week} - {entry.position}
+                        </Link>
                     </li>
                 ))}
             </ol>
@@ -23,17 +43,7 @@ export function TrackPage() {
 }
 
 export function SearchPage() {
-    const [searchParams] = useSearchParams();
-    const [searchResults, setSearchResults] = useState<string[]>([]);
-    const format = (track: Track) => `${track.performer} - ${track.title} (${track.peak})`;
-    useEffect(() => {
-        const performer = searchParams.get("performer");
-        if (performer) {
-            queryPerformer(performer)
-                .then((tracks) => tracks.map(format))
-                .then(setSearchResults);
-        }
-    }, [searchParams]);
+    const searchResults = useLoaderData() as Track[];
     return (
         <>
             <Form role="search">
@@ -43,8 +53,12 @@ export function SearchPage() {
                 <button type="submit">Search</button>
             </Form>
             <ol>
-                {searchResults.map((result) => (
-                    <li key={result}>{result}</li>
+                {searchResults.map((track) => (
+                    <li key={track.title}>
+                        <Link to={`/tracks/${track.performer}/${track.title}`}>
+                            {track.performer} - {track.title} ({track.peak})
+                        </Link>
+                    </li>
                 ))}
             </ol>
         </>
