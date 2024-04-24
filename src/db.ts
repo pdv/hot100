@@ -2,10 +2,7 @@ import * as Comlink from "comlink";
 import { LazyHttpDatabase } from "sql.js-httpvfs/dist/sqlite.worker";
 import { createDbWorker } from "sql.js-httpvfs";
 
-const workerUrl = new URL(
-    "sql.js-httpvfs/dist/sqlite.worker.js",
-    import.meta.url,
-);
+const workerUrl = new URL("sql.js-httpvfs/dist/sqlite.worker.js", import.meta.url);
 const wasmUrl = new URL("sql.js-httpvfs/dist/sql-wasm.wasm", import.meta.url);
 
 let database: Comlink.Remote<LazyHttpDatabase>;
@@ -32,23 +29,40 @@ async function getDb(): Promise<Comlink.Remote<LazyHttpDatabase>> {
     return database;
 }
 
-interface Track {
+export interface Track {
+    performer: string;
     title: string;
     peak: string;
 }
 
 const performerQuery = `
-select title, min(current_week) as peak
+select performer, title, min(current_week) as peak
 from hot100_search
 where performer = ?
-group by 1
-order by 2
+group by 1, 2
+order by 3
 `.trim();
 
-export async function queryPerformer(performer: string): Promise<string[]> {
+export async function queryPerformer(performer: string): Promise<Track[]> {
     const db = await getDb();
     const result = await db.query(performerQuery, [performer]);
-    console.log(result);
-    const cast = result as Track[];
-    return cast.map((t) => `${t.title} ${t.peak}`);
+    return result as Track[];
+}
+
+export interface Entry {
+    week: string;
+    position: string;
+}
+
+const chartQuery = `
+select chart_week as week, current_week as position
+from hot100_search
+where performer = ?1 and title = ?2
+order by 1
+`.trim();
+
+export async function queryChart(performer: String, title: String): Promise<Entry[]> {
+    const db = await getDb();
+    const result = await db.query(chartQuery, [performer, title]);
+    return result as Entry[];
 }

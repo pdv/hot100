@@ -1,44 +1,30 @@
-import { queryPerformer } from "./db";
+import { queryChart, queryPerformer } from "./db";
 import * as React from "react";
 import * as ReactDOM from "react-dom/client";
-import {
-    createHashRouter,
-    Form,
-    RouterProvider,
-    useSearchParams,
-} from "react-router-dom";
-import { useEffect, useState } from "react";
-
-function SearchPage() {
-    const [searchParams] = useSearchParams();
-    const [searchResults, setSearchResults] = useState<string[]>([]);
-    useEffect(() => {
-        const performer = searchParams.get("performer");
-        if (performer) {
-            queryPerformer(performer).then(setSearchResults);
-        }
-    }, [searchParams]);
-    return (
-        <>
-            <Form role="search">
-                <label>
-                    <input name="performer" />
-                </label>
-                <button type="submit">Search</button>
-            </Form>
-            <ol>
-                {searchResults.map((result) => (
-                    <li key={result}>{result}</li>
-                ))}
-            </ol>
-        </>
-    );
-}
+import { createHashRouter, RouterProvider } from "react-router-dom";
+import { SearchPage, TrackPage } from "./ui";
 
 const router = createHashRouter([
     {
-        path: "/*",
+        path: "/tracks/:performer/:title",
+        element: <TrackPage />,
+        loader: async ({ params }) => {
+            const performer = params.performer ?? "Rick Astley";
+            const title = params.title ?? "Never Gonna Give You Up";
+            return queryChart(performer, title);
+        },
+    },
+    {
+        path: "/",
         element: <SearchPage />,
+        loader: async ({ request }) => {
+            const performer = new URL(request.url).searchParams.get("performer");
+            if (performer) {
+                return queryPerformer(performer);
+            } else {
+                return [];
+            }
+        },
     },
 ]);
 
