@@ -1,5 +1,5 @@
-pull:
-	bash ./update.sh
+create_db:
+	bash ./create_db.sh
 
 start:
 	npx webpack --mode=development

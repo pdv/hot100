@@ -7,6 +7,7 @@ export function ChartPage() {
     const chart = useLoaderData() as Track[];
     return (
         <div>
+            <Link to="/">Home</Link>
             <h3>{week}</h3>
             <ol>
                 {chart.map((track) => (
@@ -26,6 +27,7 @@ export function TrackPage() {
     const entries = useLoaderData() as Entry[];
     return (
         <div>
+            <Link to={`/?performer=${performer}`}>Home</Link>
             <h3>
                 {performer} - {title}
             </h3>
@@ -47,9 +49,7 @@ export function SearchPage() {
     return (
         <>
             <Form role="search">
-                <label>
-                    <input name="performer" />
-                </label>
+                <input name="performer" aria-label="performer" placeholder="Artist" />
                 <button type="submit">Search</button>
             </Form>
             <ol>
