@@ -37,7 +37,7 @@ export interface Track {
 
 const performerQuery = `
 select performer, title, min(current_week) as peak
-from hot100_search
+from hot100_performers
 where performer = ?
 group by 1, 2
 order by 3
@@ -56,7 +56,7 @@ export interface Entry {
 
 const entriesQuery = `
 select chart_week as week, current_week as position
-from hot100_search
+from hot100_performers
 where performer = ?1 and title = ?2
 order by 1
 `.trim();
@@ -69,7 +69,7 @@ export async function queryEntries(performer: String, title: String): Promise<En
 
 const chartQuery = `
 select current_week as peak, performer, title
-from hot100_search
+from hot100_weeks
 where chart_week = ?
 `.trim();
 
