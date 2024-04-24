@@ -38,9 +38,14 @@ export interface Track {
 const performerQuery = `
 select performer, title, min(current_week) as peak
 from hot100_performers
-where performer = ?
+where performer in (
+    select name from performers_search
+    where name match ?
+    limit 20
+)
 group by 1, 2
 order by 3
+limit 100
 `.trim();
 
 export async function queryPerformer(performer: string): Promise<Track[]> {
