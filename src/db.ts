@@ -38,15 +38,7 @@ export interface Track {
 const peaksQuery = `
 select performer, title, peak
 from hot100_peaks
-where performer in (
-    select name from performers_search
-    where name match ?1
-    limit 50
-) or title in (
-    select title from tracks_search
-    where title match ?1
-    limit 50
-)
+where hot100_peaks match ?
 order by peak
 limit 100
 `.trim();
