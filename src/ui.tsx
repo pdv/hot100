@@ -27,7 +27,7 @@ export function TrackPage() {
     const entries = useLoaderData() as Entry[];
     return (
         <div>
-            <Link to={`/?performer=${performer}`}>Home</Link>
+            <Link to={`/?q=${performer}`}>Home</Link>
             <h3>
                 {performer} - {title}
             </h3>
@@ -49,7 +49,7 @@ export function SearchPage() {
     return (
         <>
             <Form role="search">
-                <input name="performer" aria-label="performer" placeholder="Artist" />
+                <input name="q" aria-label="search query" />
                 <button type="submit">Search</button>
             </Form>
             <ol>

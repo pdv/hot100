@@ -40,16 +40,20 @@ select performer, title, peak
 from hot100_peaks
 where performer in (
     select name from performers_search
-    where name match ?
-    limit 20
+    where name match ?1
+    limit 50
+) or title in (
+    select title from tracks_search
+    where title match ?1
+    limit 50
 )
 order by peak
 limit 100
 `.trim();
 
-export async function queryPerformer(performer: string): Promise<Track[]> {
+export async function queryPeaks(searchQuery: String): Promise<Track[]> {
     const db = await getDb();
-    const result = await db.query(peaksQuery, [performer]);
+    const result = await db.query(peaksQuery, [searchQuery]);
     return result as Track[];
 }
 
@@ -73,7 +77,7 @@ export async function queryEntries(performer: String, title: String): Promise<En
 const chartQuery = `
 select position, performer, title
 from hot100_weeks
-where chart_week = ?
+where week = ?
 `.trim();
 
 export async function queryChart(week: String): Promise<Track[]> {

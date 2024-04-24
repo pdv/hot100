@@ -28,4 +28,12 @@ insert into performers(name) select performer from hot100_peaks group by 1;
 create virtual table performers_search using fts5(name, content=performers, content_rowid=id);
 insert into performers_search(rowid, name) select id, name from performers;
 
+create table tracks(
+    id integer primary key autoincrement,
+    title text not null unique
+);
+insert into tracks(title) select title from hot100_peaks group by 1 order by 1;
+create virtual table tracks_search using fts5(title, content=tracks, content_rowid=id);
+insert into tracks_search(rowid, title) select id, title from tracks;
+
 vacuum;

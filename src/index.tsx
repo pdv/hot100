@@ -1,4 +1,4 @@
-import { queryEntries, queryChart, queryPerformer } from "./db";
+import { queryEntries, queryChart, queryPeaks } from "./db";
 import * as React from "react";
 import * as ReactDOM from "react-dom/client";
 import { createHashRouter, RouterProvider } from "react-router-dom";
@@ -26,9 +26,9 @@ const router = createHashRouter([
         path: "/",
         element: <SearchPage />,
         loader: async ({ request }) => {
-            const performer = new URL(request.url).searchParams.get("performer");
-            if (performer) {
-                return queryPerformer(performer);
+            const searchQuery = new URL(request.url).searchParams.get("q");
+            if (searchQuery) {
+                return queryPeaks(searchQuery);
             } else {
                 return [];
             }
