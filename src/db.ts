@@ -35,22 +35,21 @@ export interface Track {
     peak: string;
 }
 
-const performerQuery = `
-select performer, title, min(current_week) as peak
-from hot100_performers
+const peaksQuery = `
+select performer, title, peak
+from hot100_peaks
 where performer in (
     select name from performers_search
     where name match ?
     limit 20
 )
-group by 1, 2
-order by 3
+order by peak
 limit 100
 `.trim();
 
 export async function queryPerformer(performer: string): Promise<Track[]> {
     const db = await getDb();
-    const result = await db.query(performerQuery, [performer]);
+    const result = await db.query(peaksQuery, [performer]);
     return result as Track[];
 }
 
@@ -60,10 +59,9 @@ export interface Entry {
 }
 
 const entriesQuery = `
-select chart_week as week, current_week as position
-from hot100_performers
+select week, position
+from hot100_tracks
 where performer = ?1 and title = ?2
-order by 1
 `.trim();
 
 export async function queryEntries(performer: String, title: String): Promise<Entry[]> {
@@ -73,7 +71,7 @@ export async function queryEntries(performer: String, title: String): Promise<En
 }
 
 const chartQuery = `
-select current_week as peak, performer, title
+select position, performer, title
 from hot100_weeks
 where chart_week = ?
 `.trim();
