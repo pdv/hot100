@@ -1,8 +1,9 @@
 import { queryEntries, queryChart, queryPeaks } from "./db";
 import * as React from "react";
 import * as ReactDOM from "react-dom/client";
-import { createHashRouter, RouterProvider } from "react-router-dom";
+import { createHashRouter, redirect, RouterProvider } from "react-router-dom";
 import { ChartPage, SearchPage, TrackPage } from "./ui";
+import { getChartWeek } from "./utils";
 
 const router = createHashRouter([
     {
@@ -10,6 +11,10 @@ const router = createHashRouter([
         element: <ChartPage />,
         loader: async ({ params }) => {
             const week = params.week ?? "1988-03-12";
+            const chartWeek = getChartWeek(week);
+            if (week !== chartWeek) {
+                return redirect(`/charts/${chartWeek}`);
+            }
             return queryChart(week);
         },
     },

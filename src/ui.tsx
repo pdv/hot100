@@ -1,13 +1,21 @@
 import * as React from "react";
-import { Form, Link, useLoaderData, useParams, useSearchParams } from "react-router-dom";
+import { Form, Link, useLoaderData, useParams } from "react-router-dom";
 import { Entry, Track } from "./db";
+import { getSurroundingWeeks } from "./utils";
 
 export function ChartPage() {
     const { week } = useParams();
     const chart = useLoaderData() as Track[];
+    const [lastWeek, nextWeek] = getSurroundingWeeks(week ?? "1988-03-12");
     return (
         <div>
-            <Link to="/">Home</Link>
+            <nav>
+                <Link to={`/charts/${lastWeek}`}>{lastWeek}</Link>
+                {" < "}
+                <Link to="/">Home</Link>
+                {" > "}
+                <Link to={`/charts/${nextWeek}`}>{nextWeek}</Link>
+            </nav>
             <h3>{week}</h3>
             <ol>
                 {chart.map((track) => (
@@ -27,7 +35,11 @@ export function TrackPage() {
     const entries = useLoaderData() as Entry[];
     return (
         <div>
-            <Link to={`/?q=${performer}`}>Home</Link>
+            <nav>
+                <Link to="/">Home</Link>
+                {" - "}
+                <Link to={`/?q=${performer}`}>Artist</Link>
+            </nav>
             <h3>
                 {performer} - {title}
             </h3>
