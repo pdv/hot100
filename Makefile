@@ -10,4 +10,3 @@ build:
 
 format:
 	npx prettier . --write
-
