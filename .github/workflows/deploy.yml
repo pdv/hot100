@@ -28,7 +28,7 @@ jobs:
       - name: Install sqlite-utils
         run: pipx install sqlite-utils
       - name: Pull DB
-        run: make create_db
+        run: mkdir dist && make create_db
       - name: Build
         run: make build
       - name: Setup Pages
