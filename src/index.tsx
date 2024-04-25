@@ -1,4 +1,4 @@
-import { queryEntries, queryChart, queryPeaks } from "./db";
+import { queryEntries, queryChart, queryPeaks, loadDb } from "./db";
 import * as React from "react";
 import * as ReactDOM from "react-dom/client";
 import { createHashRouter, redirect, RouterProvider } from "react-router-dom";
@@ -35,6 +35,7 @@ const router = createHashRouter([
             if (searchQuery) {
                 return queryPeaks(searchQuery);
             } else {
+                await loadDb();
                 return [];
             }
         },
@@ -42,7 +43,7 @@ const router = createHashRouter([
 ]);
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
-    //     <React.StrictMode>
-    <RouterProvider router={router} />,
-    //    </React.StrictMode>
+    <React.StrictMode>
+        <RouterProvider router={router} />
+    </React.StrictMode>,
 );

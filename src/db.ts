@@ -29,6 +29,10 @@ async function getDb(): Promise<Comlink.Remote<LazyHttpDatabase>> {
     return database;
 }
 
+export async function loadDb(): Promise<void> {
+    const _ = await getDb();
+}
+
 export interface Track {
     performer: string;
     title: string;
