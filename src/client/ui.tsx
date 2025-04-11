@@ -1,7 +1,7 @@
-import * as React from "react";
+import React from "react";
 import { Form, Link, useLoaderData, useParams } from "react-router-dom";
-import { Entry, Track } from "./db";
-import { getSurroundingWeeks } from "./utils";
+import { Entry, Track } from "../server/db";
+import { getSurroundingWeeks } from "../utils";
 
 export function ChartPage() {
     const { week } = useParams();

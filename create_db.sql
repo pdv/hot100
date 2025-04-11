@@ -1,5 +1,3 @@
-pragma page_size = 4096;
-
 create virtual table hot100_peaks using fts5(performer, title, peak);
 insert into hot100_peaks
     select performer, title, min(current_week) as peak
@@ -18,5 +16,3 @@ create table hot100_weeks as
     from hot100
     order by 1, 2;
 create index hot100_weeks_chart_week on hot100_weeks(week);
-
-vacuum;

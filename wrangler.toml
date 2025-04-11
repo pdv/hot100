@@ -1,0 +1,20 @@
+name = "hot100"
+main = "src/server/index.ts"
+compatibility_date = "2025-04-01"
+upload_source_maps = true
+
+[assets]
+directory = "./public"
+binding = "ASSETS"
+not_found_handling = "single-page-application"
+
+[build]
+command = "esbuild src/client/index.tsx --bundle --splitting --format=esm --platform=browser --outdir=public/dist"
+
+[observability]
+enabled = true
+
+[[d1_databases]]
+binding = "DB"
+database_name = "hot100-db"
+database_id = "7e4b1962-8697-41e7-8d80-05ffe5b2a452"
