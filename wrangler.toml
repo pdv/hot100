@@ -1,6 +1,9 @@
 name = "hot100"
 main = "src/server/index.ts"
 compatibility_date = "2025-04-01"
+routes = [
+    { pattern = "hot100.pdv.dev", custom_domain = true }
+]
 
 [assets]
 directory = "./public"
