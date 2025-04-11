@@ -1,7 +1,7 @@
 {
     "homepage": "https://pdv.github.io/hot100",
     "scripts": {
-        "check": "tsc --project src && wrangler deploy --dry-run",
+        "check": "tsc --project src/client && tsc --project src/server && wrangler deploy --dry-run",
         "deploy": "wrangler deploy",
         "dev": "wrangler dev",
         "format": "prettier --write src/**/*.{ts,tsx}",

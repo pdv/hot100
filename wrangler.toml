@@ -1,7 +1,6 @@
 name = "hot100"
 main = "src/server/index.ts"
 compatibility_date = "2025-04-01"
-upload_source_maps = true
 
 [assets]
 directory = "./public"
@@ -9,7 +8,7 @@ binding = "ASSETS"
 not_found_handling = "single-page-application"
 
 [build]
-command = "esbuild src/client/index.tsx --bundle --splitting --format=esm --platform=browser --outdir=public/dist"
+command = "esbuild src/client/index.tsx --bundle --splitting --format=esm --platform=browser --outdir=public/dist --define:process.env.NODE_ENV=\"production\""
 
 [observability]
 enabled = true
