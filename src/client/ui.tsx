@@ -1,7 +1,7 @@
 import React from "react";
 import { Form, Link, useLoaderData, useParams } from "react-router-dom";
-import { Entry, Track } from "../server/db";
 import { getSurroundingWeeks } from "../utils";
+import { Entry, Track } from "../index";
 
 export function ChartPage() {
     const { week } = useParams();
