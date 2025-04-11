@@ -8,7 +8,7 @@ binding = "ASSETS"
 not_found_handling = "single-page-application"
 
 [build]
-command = "esbuild src/client/index.tsx --bundle --splitting --format=esm --platform=browser --outdir=public/dist --define:process.env.NODE_ENV=\"production\""
+command = "esbuild src/client/index.tsx --bundle --splitting --format=esm --platform=browser --outdir=public/dist --define:process.env.NODE_ENV=\\\"production\\\""
 
 [observability]
 enabled = true
