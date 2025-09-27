@@ -1,9 +1,10 @@
 import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { z } from "zod";
+import { getChart, getTrack, search } from "./db";
 
 const dateSchema = z.string().regex(/^\d{4}-(0?[1-9]|1[012])-(0?[1-9]|[12][0-9]|3[01])$/);
 
-export default function makeServer() {
+export default function makeServer(db: D1Database) {
     const server = new McpServer({
         name: "Hot 100",
         version: "1.0.0",
@@ -28,8 +29,7 @@ export default function makeServer() {
             },
         },
         async ({ week }) => {
-            const res = await fetch(`https://hot100.pdv.dev/api/charts/${week}`);
-            const chart = await res.json();
+            const chart = await getChart(db, week);
             return {
                 structuredContent: { chart },
             };
@@ -55,8 +55,7 @@ export default function makeServer() {
             },
         },
         async ({ artist, title }) => {
-            const res = await fetch(`https://hot100.pdv.dev/api/tracks/${artist}/${title}`);
-            const positions = await res.json();
+            const positions = await getTrack(db, artist, title);
             return { structuredContent: { positions } };
         },
     );
@@ -83,8 +82,7 @@ export default function makeServer() {
             },
         },
         async ({ q }) => {
-            const res = await fetch(`https://hot100.pdv.dev/api/search?q=${q}`);
-            const results = await res.json();
+            const results = await search(db, q);
             return { structuredContent: { results } };
         },
     );
