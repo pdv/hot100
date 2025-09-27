@@ -21,15 +21,20 @@ sqlite-utils insert "$db_file" hot100 "$csv_file" --csv \
 
 echo "Creating SQL dump file..."
 {
-  echo "DROP TABLE IF EXISTS hot100;"
-  echo "DROP TABLE IF EXISTS hot100_peaks;"
-  echo "DROP VIEW IF EXISTS hot100_tracks;"
-  echo "DROP VIEW IF EXISTS hot100_weeks;"
-  sqlite3 "$db_file" .dump | grep -v '^BEGIN TRANSACTION;' | grep -v '^COMMIT;$'
-  echo "CREATE VIRTUAL TABLE hot100_peaks USING fts5(performer, title, peak);"
-  echo "INSERT INTO hot100_peaks (performer, title, peak) SELECT performer, title, MIN(current_week) AS peak FROM hot100 GROUP BY 1, 2 ORDER BY 1;"
-  echo "CREATE VIEW hot100_tracks AS SELECT performer, title, chart_week AS week, current_week AS position FROM hot100 ORDER BY 1, 2, 3;"
-  echo "CREATE VIEW hot100_weeks AS SELECT chart_week AS week, current_week AS position, performer, title FROM hot100 ORDER BY 1, 2;"
+cat <<-SQL
+  DROP TABLE IF EXISTS hot100;
+  DROP TABLE IF EXISTS hot100_peaks;
+SQL
+
+sqlite3 "$db_file" .dump | grep -v '^BEGIN TRANSACTION;' | grep -v '^COMMIT;'
+
+cat <<-SQL
+	CREATE INDEX hot100_performer_title_chart_week_idx ON hot100 (performer, title, chart_week);
+	CREATE INDEX hot100_chart_week_current_week_idx ON hot100 (chart_week, current_week);
+	CREATE VIRTUAL TABLE hot100_peaks USING fts5(performer, title, peak);
+	INSERT INTO hot100_peaks (performer, title, peak) SELECT performer, title, MIN(current_week) AS peak FROM hot100 GROUP BY 1, 2 ORDER BY 1;
+
+SQL
 } > "$dump_file"
 
 echo "Uploading to remote DB..."

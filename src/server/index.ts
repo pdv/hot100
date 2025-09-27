@@ -20,9 +20,9 @@ export default AutoRouter({
     .get("/api/charts/:week", async ({ week }, env) => {
         const { results } = await env.DB.prepare(
             `
-            SELECT position, performer, title
-            FROM hot100_weeks
-            WHERE week = ?
+            SELECT current_week as position, performer, title
+            FROM hot100
+            WHERE chart_week = ?
         `.trim(),
         )
             .bind(week)
@@ -32,8 +32,8 @@ export default AutoRouter({
     .get("/api/tracks/:performer/:title", async ({ performer, title }, env) => {
         const { results } = await env.DB.prepare(
             `
-            SELECT week, position
-            FROM hot100_tracks
+            SELECT chart_week as week, current_week as position
+            FROM hot100
             WHERE performer = ?1 AND title = ?2
         `.trim(),
         )
