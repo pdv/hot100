@@ -21,7 +21,7 @@ export default AutoRouter({
     .get("/api/tracks/:performer/:title", async ({ performer, title }, env) => {
         return await getTrack(env.DB, performer, title);
     })
-    .post("/mcp", async (req, env, ctx) => {
+    .all("/mcp", async (req, env, ctx) => {
         return MCP.serve("/mcp").fetch(req, env, ctx)
     })
     .get("*", (req, env) => env.ASSETS.fetch(req));
