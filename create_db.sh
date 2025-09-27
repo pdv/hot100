@@ -21,7 +21,7 @@ echo "Transforming data..."
 sqlite-utils transform "$db_path" hot100 --pk id
 
 echo "Dumping database to SQL file..."
-sqlite3 dist/hot100.sqlite3 .dump | grep -v '^BEGIN TRANSACTION;$' | grep -v '^COMMIT;$' > "$dump_file"
+sqlite3 dist/hot100.sqlite3 .dump | grep -v '^BEGIN TRANSACTION;$' | grep -v '^COMMIT;$' | sed 's/INSERT INTO/INSERT OR IGNORE INTO/g' > "$dump_file"
 cat ./create_db.sql >> "$dump_file"
 
 echo "Executing SQL on remote database..."
