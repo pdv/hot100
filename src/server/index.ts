@@ -1,4 +1,5 @@
 import { AutoRouter } from "itty-router";
+import { MCP } from "./mcp";
 
 export default AutoRouter({
     catch: (e) => console.error(e),
@@ -40,5 +41,8 @@ export default AutoRouter({
             .bind(decodeURIComponent(performer), decodeURIComponent(title))
             .all();
         return results;
+    })
+    .post("/mcp", async (req, env, ctx) => {
+        return MCP.serve("/mcp").fetch(req, env, ctx)
     })
     .get("*", (req, env) => env.ASSETS.fetch(req));
