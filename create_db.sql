@@ -1,21 +1,27 @@
-drop table if exists hot100_peaks;
-create virtual table hot100_peaks using fts5(performer, title, peak);
-insert into hot100_peaks
-    select performer, title, min(current_week) as peak
-    from hot100
-    group by 1, 2
-    order by 1;
+CREATE TABLE IF NOT EXISTS hot100 (
+    id TEXT PRIMARY KEY,
+    chart_week TEXT,
+    current_week INTEGER,
+    title TEXT,
+    performer TEXT,
+    last_week INTEGER,
+    peak_position INTEGER,
+    weeks_on_chart INTEGER
+);
 
-drop table if exists hot100_tracks;
-create table hot100_tracks as
-    select performer, title, chart_week as week, current_week as position
-    from hot100
-    order by 1, 2, 3;
-create index hot100_tracks_performer_title on hot100_tracks(performer, title);
+CREATE VIRTUAL TABLE IF NOT EXISTS hot100_peaks USING fts5(performer, title, peak);
+INSERT OR REPLACE INTO hot100_peaks
+    SELECT performer, title, MIN(current_week) AS peak
+    FROM hot100
+    GROUP BY 1, 2
+    ORDER BY 1;
 
-drop table if exists hot100_weeks;
-create table hot100_weeks as
-    select chart_week as week, current_week as position, performer, title
-    from hot100
-    order by 1, 2;
-create index hot100_weeks_chart_week on hot100_weeks(week);
+CREATE VIEW IF NOT EXISTS hot100_tracks AS
+    SELECT performer, title, chart_week AS week, current_week AS position
+    FROM hot100
+    ORDER BY 1, 2, 3;
+
+CREATE VIEW IF NOT EXISTS hot100_weeks AS
+    SELECT chart_week AS week, current_week AS position, performer, title
+    FROM hot100
+    ORDER BY 1, 2;
