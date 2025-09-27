@@ -25,7 +25,7 @@ echo "Creating SQL dump file..."
   echo "DROP TABLE IF EXISTS hot100_peaks;"
   echo "DROP VIEW IF EXISTS hot100_tracks;"
   echo "DROP VIEW IF EXISTS hot100_weeks;"
-  sqlite3 "$db_file" .dump | grep -v '^BEGIN TRANSACTION;' | grep -v '^COMMIT;$' # Corrected: removed trailing \ from COMMIT;$
+  sqlite3 "$db_file" .dump | grep -v '^BEGIN TRANSACTION;' | grep -v '^COMMIT;$'
   echo "CREATE VIRTUAL TABLE hot100_peaks USING fts5(performer, title, peak);"
   echo "INSERT INTO hot100_peaks (performer, title, peak) SELECT performer, title, MIN(current_week) AS peak FROM hot100 GROUP BY 1, 2 ORDER BY 1;"
   echo "CREATE VIEW hot100_tracks AS SELECT performer, title, chart_week AS week, current_week AS position FROM hot100 ORDER BY 1, 2, 3;"
