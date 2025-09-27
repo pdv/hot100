@@ -29,9 +29,15 @@ export default function makeServer(db: D1Database) {
             },
         },
         async ({ week }) => {
-            const chart = await getChart(db, week);
+            const res = {
+                content: await getChart(db, week)
+            };
             return {
-                structuredContent: { chart },
+                content: [{
+                    type: "text",
+                    text: JSON.stringify(res)
+                }],
+                structuredContent: res,
             };
         },
     );
@@ -55,8 +61,16 @@ export default function makeServer(db: D1Database) {
             },
         },
         async ({ artist, title }) => {
-            const positions = await getTrack(db, artist, title);
-            return { structuredContent: { positions } };
+            const res = {
+                positions: await getTrack(db, artist, title)
+            };
+            return {
+                content: [{
+                    type: "text",
+                    text: JSON.stringify(res),
+                }],
+                structuredContent: res
+            };
         },
     );
 
@@ -82,8 +96,16 @@ export default function makeServer(db: D1Database) {
             },
         },
         async ({ q }) => {
-            const results = await search(db, q);
-            return { structuredContent: { results } };
+            const res = {
+                results: await search(db, q)
+            };
+            return {
+                content: [{
+                    type: "text",
+                    text: JSON.stringify(res)
+                }],
+                structuredContent: res,
+            };
         },
     );
 
