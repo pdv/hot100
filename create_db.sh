@@ -11,13 +11,7 @@ echo "Downloading data from $csv_url..."
 curl --fail --silent --show-error --location "$csv_url" --output "$csv_file"
 
 echo "Converting CSV to SQL..."
-sqlite-utils insert "$db_file" hot100 "$csv_file" --csv \
-  --convert '
-    row["id"] = f"""{row["chart_week"]}-{row["current_week"]}"""
-    row["peak_position"] = row.pop("peak_pos")
-    row["weeks_on_chart"] = row.pop("wks_on_chart")
-    return row
-'
+sqlite-utils insert "$db_file" hot100 "$csv_file" --csv --detect-types
 
 echo "Creating SQL dump file..."
 {
