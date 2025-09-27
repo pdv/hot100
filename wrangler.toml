@@ -1,7 +1,7 @@
 name = "hot100"
 main = "src/server/index.ts"
 compatibility_date = "2025-04-01"
-compatability_flags = ["nodejs_compat"]
+compatibility_flags = ["nodejs_compat"]
 routes = [
     { pattern = "hot100.pdv.dev", custom_domain = true }
 ]
