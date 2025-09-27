@@ -20,4 +20,3 @@ enabled = true
 binding = "DB"
 database_name = "hot100-db"
 database_id = "ae7a1385-9c1b-46d8-977b-a9a2a180eadf"
-migrations_dir = "migrations"
