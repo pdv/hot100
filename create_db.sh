@@ -2,7 +2,8 @@
 
 set -e
 
-db_path="./dist/hot100.sqlite3"
+db_path="dist/hot100.sqlite3"
+dump_file="dist/dump.sql"
 csv_url="https://raw.githubusercontent.com/utdata/rwd-billboard-data/main/data-out/hot-100-current.csv"
 csv_file="$(mktemp)"
 
@@ -20,12 +21,10 @@ echo "Transforming data..."
 sqlite-utils transform "$db_path" hot100 --pk id
 
 echo "Dumping database to SQL file..."
-sqlite3 dist/hot100.sqlte3 .dump > dist/dump.sql
+sqlite3 dist/hot100.sqlite3 .dump | grep -v '^BEGIN TRANSACTION;$' | grep -v '^COMMIT;$' > "$dump_file"
+cat ./create_db.sql >> "$dump_file"
 
-echo "Executing SQL dump on remote database..."
-npx wrangler d1 execute hot100-db --remote --file=dist/dump.sql
-
-echo "Executing additional SQL..."
-npx wrangler d1 execute hot100-db --remote --file=./create_db.sql
+echo "Executing SQL on remote database..."
+npx wrangler d1 execute hot100-db --remote --file="$dump_file"
 
 echo "Database creation finished successfully."
