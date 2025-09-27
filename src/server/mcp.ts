@@ -30,7 +30,7 @@ export default function makeServer(db: D1Database) {
         },
         async ({ week }) => {
             const res = {
-                content: await getChart(db, week)
+                chart: await getChart(db, week)
             };
             return {
                 content: [{
