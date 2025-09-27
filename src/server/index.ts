@@ -1,5 +1,12 @@
 import { AutoRouter } from "itty-router";
-import { MCP } from "./mcp";
+import makeServer from "./mcp";
+import { McpAgent } from "agents/mcp";
+
+export class MCP extends McpAgent {
+    server = makeServer();
+    async init() {
+    }
+}
 
 export default AutoRouter({
     catch: (e) => console.error(e),
