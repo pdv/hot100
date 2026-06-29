@@ -2,6 +2,13 @@
 
 set -e
 
+for dep in sqlite3 sqlite-utils npm; do
+    if ! command -v "$dep" &> /dev/null; then
+        echo "Error: Missing required dependency '$dep'." >&2
+        exit 1
+    fi
+done
+
 csv_url="https://raw.githubusercontent.com/utdata/rwd-billboard-data/main/data-out/hot-100-current.csv"
 csv_file="$(mktemp)"
 db_file="$(mktemp)"
