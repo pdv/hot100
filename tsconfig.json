@@ -1,14 +1,12 @@
 {
   "compilerOptions": {
     "target": "esnext",
-    "lib": ["esnext", "dom"],
     "module": "esnext",
     "moduleResolution": "bundler",
     "noEmit": true,
-    "isolatedModules": true,
-    "forceConsistentCasingInFileNames": true,
     "skipLibCheck": true,
-    "strict": true,
-    "jsx": "react-jsx"
-  }
+    "types": ["./worker-configuration.d.ts"],
+    "strict": true
+  },
+  "include": ["src/index.ts"]
 }
