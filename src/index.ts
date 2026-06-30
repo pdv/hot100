@@ -24,6 +24,7 @@ function getSurroundingWeeks(week: string): [string, string] {
 function page(body: string): Response {
     return html(
         `<!DOCTYPE html><html><head><meta charset="utf-8"><title>hot100</title></head><body>${body}</body></html>`,
+        { headers: { "Cache-Control": "public, max-age=604800" }}
     );
 }
 
